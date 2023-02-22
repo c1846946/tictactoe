@@ -14,9 +14,8 @@ const gameboard = (function () {
 
   const getBoard = () => board;
 
-  const playerMark = (column, row, player) => {
+  const playerMark = (column, row, player) =>
     board[column][row].markCell(player);
-  };
 
   const printBoard = () => {
     const boardWithCellValues = board.map((row) =>
@@ -69,6 +68,7 @@ const gamePlay = (function () {
   };
   //mark a square
   const takeTurn = (column, row) => {
+    if (gameboard.getBoard()[column][row].getValue() !== 0) return;
     console.log(`${getActivePlayer().name} is marking ${column}, ${row} `);
     gameboard.playerMark(column, row, getActivePlayer().name);
 
