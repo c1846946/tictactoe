@@ -44,14 +44,8 @@ function Cell() {
   };
 }
 
-//create player objects with a factory
-//const Player = (name) => {
-//pick a square
-//};
-
-//make a gameplay object
+//make a gameplay module
 const gamePlay = (function () {
-  //whoever's turn
   const players = [
     {
       name: "X",
@@ -66,11 +60,21 @@ const gamePlay = (function () {
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
+
   const getActivePlayer = () => activePlayer;
+
+  const printNewTurn = () => {
+    gameboard.printBoard();
+    console.log(`${getActivePlayer().name}'s turn`);
+  };
   //mark a square
   const takeTurn = (column, row) => {
     console.log(`${getActivePlayer().name} is marking ${column}, ${row} `);
     gameboard.playerMark(column, row, getActivePlayer().name);
+
+    switchPlayerTurn();
+
+    printNewTurn();
   };
   //keep track of who's turn
   return { takeTurn };
