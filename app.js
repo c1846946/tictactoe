@@ -1,5 +1,5 @@
 //make a gameboard object
-const gameboard = (function () {
+function Gameboard() {
   //keep track of x's and o's
   //const boardArray = ["X", "X", , "O", "O", , , "X", "O"]
   const rows = 3;
@@ -26,7 +26,7 @@ const gameboard = (function () {
 
   return { getBoard, printBoard, playerMark };
   //link array to divs
-})();
+}
 
 function Cell() {
   let value = 0;
@@ -44,7 +44,9 @@ function Cell() {
 }
 
 //make a gameplay module
-const gamePlay = (function () {
+function gameController() {
+  const board = Gameboard();
+
   const players = [
     {
       name: "X",
@@ -63,21 +65,53 @@ const gamePlay = (function () {
   const getActivePlayer = () => activePlayer;
 
   const printNewTurn = () => {
-    gameboard.printBoard();
+    board.printBoard();
     console.log(`${getActivePlayer().name}'s turn`);
   };
-  //mark a square
+
+  /* const checkEnd = () => {
+    if() winner();
+    if() draw();
+  } */
+
   const takeTurn = (column, row) => {
-    if (gameboard.getBoard()[column][row].getValue() !== 0) return;
+    if (board.getBoard()[column][row].getValue() !== 0) return;
     console.log(`${getActivePlayer().name} is marking ${column}, ${row} `);
-    gameboard.playerMark(column, row, getActivePlayer().name);
+    board.playerMark(column, row, getActivePlayer().name);
+
+    //checkEnd();
 
     switchPlayerTurn();
 
     printNewTurn();
   };
-  //keep track of who's turn
-  return { takeTurn };
-  //can't play the same square twice
-  //declare winner and disable gameplay
-})();
+
+  printNewTurn();
+
+  return { takeTurn, getBoard: board.getBoard };
+}
+
+function ScreenController() {
+  //refactor to close up the above functions
+  const game = gameController();
+  const board = game.getBoard();
+
+  boardDiv = document.querySelector(".board");
+  //display who's turn
+
+  //render board squares
+  board.forEach((row) => {
+    row.forEach((cell, index) => {
+      const cellButton = document.createElement("button");
+      cellButton.classList.add("cell");
+      cellButton.dataset.xcoordinate = index;
+      cellButton.dataset.ycoordinate = board.indexOf(row);
+      cellButton.textContent = cell.getValue();
+      boardDiv.appendChild(cellButton);
+    });
+  });
+  //for each cell, create a button, with coordinate dataset
+  //use css grid to organize the cells
+}
+
+ScreenController();
